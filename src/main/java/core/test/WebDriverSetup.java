@@ -9,9 +9,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
 public class WebDriverSetup {
-	// ****************
-	// * CLASS FIElDS *
-	// ****************
+	// *****************
+	// * DRIVER FIElDS *
+	// *****************
 	// Define a base driver from which all extending classes will inherit
 	private WebDriver driver;
 	// Define test attributes
@@ -45,7 +45,6 @@ public class WebDriverSetup {
 	private void setDriver(WebDriver driver) {
 		this.driver = driver;
 	}
-
 	/**
 	 * @summary gets the base webdriver for the test
 	 * @return base WebDriver
@@ -63,7 +62,6 @@ public class WebDriverSetup {
 	public void setBrowserType(String browserType) {
 		this.browserType = browserType;
 	}
-
 	/**
 	 * @summary gets the browser under test
 	 * @return String, browser type under test
@@ -81,7 +79,6 @@ public class WebDriverSetup {
 	public void setBrowserVersion(String browserVersion) {
 		this.browserVersion = browserVersion;
 	}
-
 	/**
 	 * @summary gets the browser version under test
 	 * @return String, browser version under test
@@ -99,7 +96,6 @@ public class WebDriverSetup {
 	public void setOperatingSystem(String operatingSystem) {
 		this.operatingSystem = operatingSystem;
 	}
-
 	/**
 	 * @summary gets the operating system under test
 	 * @return - String, operating system under test
@@ -117,7 +113,6 @@ public class WebDriverSetup {
 	public void setEnvironment(String environment) {
 		this.environment = environment;
 	}
-
 	/**
 	 * @summary gets the environment un which to test
 	 * @return String, environment in which to test
@@ -135,7 +130,6 @@ public class WebDriverSetup {
 	public void setRunLocation(String runLocation) {
 		this.runLocation = runLocation;
 	}
-
 	/**
 	 * @summary gets the test execution run location
 	 * @return String, test execution run location
