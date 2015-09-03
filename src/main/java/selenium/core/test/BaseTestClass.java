@@ -1,11 +1,11 @@
-package core.test;
+package selenium.core.test;
 
 import java.util.concurrent.TimeUnit;
 
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
-import core.Constants;
+import selenium.core.Constants;
 
 public class BaseTestClass extends WebDriverSetup {
 	// **************************

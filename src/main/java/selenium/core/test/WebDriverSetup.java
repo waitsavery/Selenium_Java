@@ -1,4 +1,4 @@
-package core.test;
+package selenium.core.test;
 
 import java.io.IOException;
 import java.util.Set;

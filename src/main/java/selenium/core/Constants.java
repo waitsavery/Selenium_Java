@@ -1,4 +1,4 @@
-package core;
+package selenium.core;
 
 public class Constants {
 	//************

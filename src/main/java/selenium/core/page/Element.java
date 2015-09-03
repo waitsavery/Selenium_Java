@@ -1,10 +1,10 @@
-package core.page;
+package selenium.core.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import core.test.BaseTestClass;
+import selenium.core.test.BaseTestClass;
 
 public class Element {
 	// ******************
