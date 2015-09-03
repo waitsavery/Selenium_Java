@@ -1,20 +1,24 @@
 package selenium.core.page;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import selenium.core.Constants;
 import selenium.core.test.BaseTestClass;
 
 public class BasePageClass extends Element{
 
-	// ************************
+	// **************************
 	// * BASE PAGE CLASS FIElDS *
-	// ************************
+	// **************************
+	long timeout;
 
-	// ****************************
+	// ******************************
 	// * BASE PAGE CLASS BUILD AREA *
-	// ****************************
+	// ******************************
 	/**
 	 * Dummy constructor
 	 */
@@ -31,9 +35,9 @@ public class BasePageClass extends Element{
 	// * GETTERS AND SETTERS *
 	// ***********************
 
-	// ******************************
+	// ********************************
 	// * BASE PAGE CLASS INTERACTIONS *
-	// ******************************
+	// ********************************
 	public void set(String value){
 		System.out.println("Sending keys ["+value+"] to element ["+getElementLocator()+"].");
 		getElement().clear();
@@ -70,5 +74,40 @@ public class BasePageClass extends Element{
 	
 	public void click(WebDriver driver, By by){
 		click(setElementAndDriver(driver, by));
+	}
+	
+	//***************************
+	//***************************
+	//*			SYNCS			*
+	//***************************
+	//***************************
+	public Boolean syncVisible(){
+		Boolean isVisible = false;
+		if(this.timeout == 0.0) this.timeout = Constants.getImplicitWaitTimeout();
+		System.out.println("Syncing to element ["+getElementLocator()+"] to be visible within ["+String.valueOf(timeout)+"] seconds.");
+		getElementDriver().manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+		isVisible = getElement().isDisplayed();
+		this.timeout = (long) 0.0;
+		getElementDriver().manage().timeouts().implicitlyWait(Constants.getImplicitWaitTimeout(), TimeUnit.SECONDS);
+		return isVisible;
+	}
+	
+	public Boolean syncVisible(long timeout){
+		Boolean isVisible = false;
+		this.timeout = timeout;
+		isVisible = syncVisible();
+		return isVisible;
+	}
+	
+	public Boolean syncVisible(long timeout, Boolean failOnFalse){
+		Boolean isVisible = false;
+		this.timeout = timeout;
+		isVisible = syncVisible();
+		if(failOnFalse && !isVisible){
+			String message = "The element ["+getElementLocator()+"] was not located within ["+String.valueOf(this.timeout)+"] seconds.";
+			System.out.println(message);
+			throw new RuntimeException(message);
+		}
+		return isVisible;
 	}
 }
