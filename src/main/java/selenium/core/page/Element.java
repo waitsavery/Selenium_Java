@@ -14,6 +14,8 @@ public class Element {
 	private WebElement element;
 	//Define a base driver from which all extending classes will inherit. Will be define the same driver as that used by the test 
 	private WebDriver elementDriver;
+	//Define a BaseTestClass object which is passed from the test level when a page class is instantiated
+	public BaseTestClass btc;
 
 	// **********************
 	// * ELEMENT BUILD AREA *
@@ -27,6 +29,8 @@ public class Element {
 	 * @param btc - BaseTestClass, passed from the test level when a page class is instantiated
 	 */
 	public Element(BaseTestClass btc){
+		System.out.println("Entering BaseTestClass");
+		this.btc = btc;
 		setElementDriver(btc.getDriver());
 	}
 
@@ -82,8 +86,24 @@ public class Element {
 	public WebElement getElement(){
 		return this.element;
 	}
+	
+	public void setElementBaseTestClass(BaseTestClass btc){
+		this.btc = btc;
+		setElementDriver(btc.getDriver());
+	}
 
 	// ************************
 	// * ELEMENT INTERACTIONS *
 	// ************************
+	public String getElementLocator(){
+		return "@FindBy: " + getElementLocatorBy() + " = " + getElementLocatorUsing();
+	}
+	
+	private String getElementLocatorBy(){
+		return getElement().toString().split("->")[1].split(":")[0].trim();
+	}
+	
+	private String getElementLocatorUsing(){
+		return getElement().toString().split("->")[1].split(":")[1].trim();
+	}
 }

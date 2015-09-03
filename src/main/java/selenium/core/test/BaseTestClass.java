@@ -150,8 +150,12 @@ public class BaseTestClass extends WebDriverSetup {
 	 * @summary gets the user role
 	 * @return String, user role
 	 */
-	public String getuserRole() {
+	public String getUserRole() {
 		return this.userRole;
+	}
+	
+	public BaseTestClass getBaseTestClass(){
+		return this;
 	}
 
 	// ********************************

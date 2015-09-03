@@ -25,7 +25,7 @@ public class WebDriverSetup {
 	// * DRIVER BUILD AREA *
 	// *********************
 	public WebDriverSetup() {
-		setBrowserType("chrome");
+		setBrowserType("firefox");
 		setBrowserVersion("");
 		setOperatingSystem("windows");
 		setEnvironment("stage");
@@ -181,12 +181,12 @@ public class WebDriverSetup {
 			break;
 		case "iexplore":
 			System.setProperty("webdriver.ie.driver",
-					"C:\\Users\\temp\\workspace\\Selenium_Java\\src\\main\\java\\drivers\\IEDriverServer.exe");
+					"C:\\Users\\temp\\workspace\\Selenium_Java\\src\\main\\java\\selenium\\core\\drivers\\IEDriverServer.exe");
 			setDriver(new InternetExplorerDriver());
 			break;
 		case "chrome":
 			System.setProperty("webdriver.chrome.driver",
-					"C:\\Users\\temp\\workspace\\Selenium_Java\\src\\main\\java\\drivers\\chromedriver.exe");
+					"C:\\Users\\temp\\workspace\\Selenium_Java\\src\\main\\java\\selenium\\core\\drivers\\chromedriver.exe");
 			setDriver(new ChromeDriver());
 			break;
 		default:

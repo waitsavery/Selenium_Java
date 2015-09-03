@@ -23,7 +23,9 @@ public class BasePageClass extends Element{
 	 * Constructor that builds the element class. Uses a BaseTestClass instance to define the driver to use to find elements
 	 * @param btc - BaseTestClass, passed from the test level when a page class is instantiated
 	 */
-	public BasePageClass(BaseTestClass btc){}
+	public BasePageClass(BaseTestClass btc){
+		System.out.println("Entering BasePageClass");
+	}
 
 	// ***********************
 	// * GETTERS AND SETTERS *
@@ -33,7 +35,7 @@ public class BasePageClass extends Element{
 	// * BASE PAGE CLASS INTERACTIONS *
 	// ******************************
 	public void set(String value){
-		System.out.println("Sending keys ["+value+"] to element ["+getElement().toString()+"].");
+		System.out.println("Sending keys ["+value+"] to element ["+getElementLocator()+"].");
 		getElement().clear();
 		getElement().sendKeys(value);
 	}
@@ -58,7 +60,7 @@ public class BasePageClass extends Element{
 	}
 	
 	public void click(WebElement element){
-		System.out.println("Clicking on element ["+getElement().toString()+"].");
+		System.out.println("Clicking on element ["+getElementLocator()+"].");
 		setElement(element).click();
 	}
 	
