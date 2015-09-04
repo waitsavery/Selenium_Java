@@ -59,17 +59,15 @@ public class Element {
 	 * @summary sets the element to be used by subsequent Element-class methods
 	 * @param element - WebElement, used to define the current element
 	 */
-	public WebElement setElement(WebElement element){
+	public void setElement(WebElement element){
 		this.element = element;
-		return this.element;
 	}
 	/**
 	 * @summary overloaded method, uses the local driver to set the element to be used by subsequent Element-class methods
 	 * @param by - By, used to define the current element
 	 */	
-	public WebElement setElement(By by){
+	public void setElement(By by){
 		this.element = getElementDriver().findElement(by);
-		return this.element;
 	}
 	/**
 	 * @summary overloaded method, sets the local driver which is used to set the element to be used by subsequent Element-class methods
@@ -77,10 +75,9 @@ public class Element {
 	 * @param by - By, used to define the current element
 	 * @return
 	 */
-	public WebElement setElementAndDriver(WebDriver driver, By by){
+	public void setElementAndDriver(WebDriver driver, By by){
 		setElementDriver(driver);
 		setElement(by);
-		return this.element;
 	}
 	
 	public WebElement getElement(){

@@ -1,82 +1,199 @@
 package selenium.core.page;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import selenium.core.Constants;
 import selenium.core.test.BaseTestClass;
 
 public class BasePageClass extends Element{
 
-	// **************************
-	// * BASE PAGE CLASS FIElDS *
-	// **************************
-	long timeout;
+	// **************************************************************************************************
+	// * 								BASE PAGE CLASS FIElDS 											*
+	// **************************************************************************************************
+	long timeout = (long) 0.0;
 	String message;
 
-	// ******************************
-	// * BASE PAGE CLASS BUILD AREA *
-	// ******************************
+	// **************************************************************************************************
+	// * 							BASE PAGE CLASS BUILD AREA 											*
+	// **************************************************************************************************
 	/**
 	 * Dummy constructor
 	 */
 	public BasePageClass(){}
 	/**
-	 * Constructor that builds the element class. Uses a BaseTestClass instance to define the driver to use to find elements
-	 * @param btc - BaseTestClass, passed from the test level when a page class is instantiated
+	 * @sumamry Constructor that builds the element class. Uses a BaseTestClass instance to define the driver to use to find elements
+	 * @param 	btc - BaseTestClass, passed from the test level when a page class is instantiated
 	 */
-	public BasePageClass(BaseTestClass btc){
-		System.out.println("Entering BasePageClass");
-	}
+	public BasePageClass(BaseTestClass btc){}
 
-	// ***********************
-	// * GETTERS AND SETTERS *
-	// ***********************
+	// **************************************************************************************************
+	// * 								GETTERS AND SETTERS 											*
+	// **************************************************************************************************
 
-	// ********************************
-	// * BASE PAGE CLASS INTERACTIONS *
-	// ********************************
+	// **************************************************************************************************
+	// * 							BASE PAGE CLASS INTERACTIONS 										*
+	// **************************************************************************************************
+	//*******************************
+	//*******************************
+	//*				SET				*
+	//*******************************
+	//*******************************
+	/**
+	 * @summary syncs to the current element (textbox) to be visible, clears the element and sends a string of keys to set the value
+	 * @param 	value - String, keys to set the value of the element
+	 */
 	public void set(String value){
-		syncVisible();
+		sync("visible");
 		System.out.println("Sending keys ["+value+"] to element ["+getElementLocator()+"].");
 		getElement().clear();
 		getElement().sendKeys(value);
 	}
-	
+	/**
+	 * @summary sets the current element (textbox) and sets it's value
+	 * @param 	element - WebElement, current element
+	 * @param 	value - String, keys to set the value of the textbox
+	 */
 	public void set(WebElement element, String value){
 		setElement(element);
 		set(value);
 	}
-	
+	/**
+	 * @summary sets the current element (textbox) and sets it's value
+	 * @param 	by - By, by-value with which to define the current element
+	 * @param 	value - String, keys to set the value of the textbox
+	 */
 	public void set(By by, String value){
 		setElement(by);
 		set(value);
 	}
-	
+	/**
+	 * @summary sets the current driver and element (textbox) and sets it's value
+	 * @param 	driver - WebDriver, current driver
+	 * @param 	by - By, by-value to use to define the current element
+	 * @param 	value - String, keys to set the value of the textbox
+	 */
 	public void set(WebDriver driver, By by, String value){
 		setElementAndDriver(driver, by);
 		set(value);
 	}
-	
+	//*******************************
+	//*******************************
+	//*				CLICK			*
+	//*******************************
+	//*******************************
+	/**
+	 * @summary syncs to the element to be visible, then clicks the element
+	 */
 	public void click(){
-		
+		sync("visible");
+		System.out.println("Clicking on element ["+getElementLocator()+"].");
 		getElement().click();
 	}
-	
+	/**
+	 * @summary sets the current element then clicks it
+	 * @param 	element - WebElement, current element
+	 */
 	public void click(WebElement element){
-		System.out.println("Clicking on element ["+getElementLocator()+"].");
-		setElement(element).click();
+		setElement(element);
+		click();
 	}
-	
+	/**
+	 * @summary sets the current element then clicks it
+	 * @param 	by - By, by-value with which to define the current element
+	 */
 	public void click(By by){
-		click(getElementDriver().findElement(by));
+		setElement(by);
+		click();
 	}
-	
+	/**
+	 * @summary sets the current driver and element then clicks it
+	 * @param 	driver - WebDriver, current driver
+	 * @param 	by - By, by-value with which to define the current element
+	 */
 	public void click(WebDriver driver, By by){
-		click(setElementAndDriver(driver, by));
+		setElementAndDriver(driver, by);
+		click();
+	}
+	//*******************************
+	//*******************************
+	//*			HIGHLIGHT			*
+	//*******************************
+	//*******************************
+	/**
+	 * @summary - uses JavaScript to highlight an element
+	 */
+	public void highlight() {
+		((JavascriptExecutor) getElementDriver()).executeScript(
+				"arguments[0].style.border='3px solid red'", getElement());
+	}
+	/**
+	 * @summary sets the current element then uses JavaScript to highlight an element
+	 * @param 	element - WebElement, current element
+	 */
+	public void highlight(WebElement element) {
+		setElement(element);
+		highlight();
+	}
+	/**
+	 * @summary sets the current element then uses JavaScript to highlight an element
+	 * @param 	by - By,  by-value with which to define the current element
+	 */
+	public void highlight(By by) {
+		setElement(by);
+		highlight();
+	}
+	/**
+	 * @summary sets the current driver and element then uses JavaScript to highlight an element
+	 * @param 	driver - WebDriver, current driver
+	 * @param 	by - By, by-value with which to define the current element
+	 */
+	public void highlight(WebDriver driver, By by) {
+		setElementAndDriver(driver, by);
+		highlight();
+	}
+	//*******************************
+	//*******************************
+	//*		SCROLL INTO VIEW		*
+	//*******************************
+	//*******************************
+	/**
+	 * @summary - uses JavaScript to scroll an element into view on the screen
+	 */
+	public void scrollIntoView() {
+		((JavascriptExecutor) getElementDriver()).executeScript(
+				"arguments[0].scrollIntoView(true);", getElement());
+	}	
+	/**
+	 * @summary sets the current element then uses JavaScript to scroll an element into view on the screen
+	 * @param 	element - WebElement, current element
+	 */
+	public void scrollIntoView(WebElement element) {
+		setElement(element);
+		scrollIntoView();
+	}	
+	/**
+	 * @summary sets the current element then uses JavaScript to scroll an element into view on the screen
+	 * @param 	by - By, by-value with which to define the current element
+	 */
+	public void scrollIntoView(By by) {
+		setElement(by);
+		scrollIntoView();
+	}	
+	/**
+	 * @summary sets the current driver and element then uses JavaScript to scroll an element into view on the screen
+	 * @param 	driver - WebDriver, current driver
+	 * @param 	by - By, by-value with which to define the current element
+	 */
+	public void scrollIntoView(WebDriver driver, By by) {
+		setElementAndDriver(driver, by);
+		scrollIntoView();
 	}
 	
 	//***************************
@@ -84,340 +201,524 @@ public class BasePageClass extends Element{
 	//*			SYNCS			*
 	//***************************
 	//***************************
-	
-	//*******************************
-	//*			SYNC VISIBLE		*
-	//*******************************
-	public Boolean syncVisible(){
-		Boolean isVisible = false;
-		if(this.timeout == 0.0) this.timeout = Constants.getImplicitWaitTimeout();
-		System.out.println("Syncing to element ["+getElementLocator()+"] to be visible within ["+String.valueOf(timeout)+"] seconds.");
-		getElementDriver().manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
-		isVisible = getElement().isDisplayed();
+	/**
+	 * @summary sets the WebDriver's ImplicitWait timeout determined by a user=defined timeout
+	 * @param 	timeout - long, amount of time in seconds to wait for an element to be located should it not be immediately located
+	 */
+	private void setSyncTimeout(long timeout){
+		this.timeout = timeout;
+		getElementDriver().manage().timeouts().implicitlyWait(this.timeout, TimeUnit.SECONDS);
+	}
+	/**
+	 * @summary resets the WebDriver's ImplicitWait timeout to the value found in the Constants.java file
+	 */
+	private void resetSyncTimeout(){
 		this.timeout = (long) 0.0;
 		getElementDriver().manage().timeouts().implicitlyWait(Constants.getImplicitWaitTimeout(), TimeUnit.SECONDS);
-		return isVisible;
 	}
-	
-	public Boolean syncVisible(long timeout){
-		Boolean isVisible = false;
-		this.timeout = timeout;
-		isVisible = syncVisible();
-		return isVisible;
-	}
-	
-	public Boolean syncVisible(long timeout, Boolean failOnFalse){
-		Boolean isVisible = false;
-		isVisible = syncVisible(timeout);
-		if(failOnFalse && !isVisible){
-			String message = "The element ["+getElementLocator()+"] was not located within ["+String.valueOf(this.timeout)+"] seconds.";
-			System.out.println(message);
-			throw new RuntimeException(message);
+	/**
+	 * @summary outputs a list of valid syncs for reporting
+	 * @param 	syncTypeArray - string array of valid sync types
+	 * @return 	string, valid sync types
+	 */
+	private String outputValidSyncTypes(String[] syncTypeArray){
+		String syncTypes = "";
+		for(String type : syncTypeArray){
+			syncTypes += type + " ; ";
 		}
-		return isVisible;
+		return syncTypes;
 	}
-	
-	public Boolean syncVisible(Boolean failOnFalse){
-		Boolean isVisible = false;
-		isVisible = syncVisible();
-		if(failOnFalse && !isVisible){
-			String message = "The element ["+getElementLocator()+"] was not located within ["+String.valueOf(this.timeout)+"] seconds.";
-			System.out.println(message);
-			throw new RuntimeException(message);
-		}
-		return isVisible;
-	}
-	
-	public Boolean syncVisible(WebElement element){
-		setElement(element);
-		return syncVisible();
-	}
-	
-	public Boolean syncVisible(WebElement element, long timeout){
-		setElement(element);
-		return syncVisible(timeout);
-	}
-
-	public Boolean syncVisible(WebElement element, long timeout, Boolean failOnFalse){
-		setElement(element);
-		return syncVisible(timeout, failOnFalse);
-	}
-
-	public Boolean syncVisible(WebElement element, Boolean failOnFalse){
-		setElement(element);
-		return syncVisible(failOnFalse);
-	}	
-	
-	public Boolean syncVisible(By by){
-		setElement(by);
-		return syncVisible();
-	}
-	
-	public Boolean syncVisible(By by, long timeout){
-		setElement(by);
-		return syncVisible(timeout);
-	}
-
-	public Boolean syncVisible(By by, long timeout, Boolean failOnFalse){
-		setElement(by);
-		return syncVisible(timeout, failOnFalse);
-	}
-
-	public Boolean syncVisible(By by, Boolean failOnFalse){
-		setElement(by);
-		return syncVisible(failOnFalse);
-	}
-	
-	//*******************************
-	//*			SYNC HIDDEN			*
-	//*******************************
-	public Boolean syncHidden(){return !syncVisible();}
-	public Boolean syncHidden(long timeout){return !syncVisible(timeout);}
-	public Boolean syncHidden(long timeout, Boolean failOnFalse){return !syncVisible(timeout, failOnFalse);}
-	public Boolean syncHidden(Boolean failOnFalse){return !syncVisible(failOnFalse);}
-	public Boolean syncHidden(WebElement element){return !syncVisible(element);}
-	public Boolean syncHidden(WebElement element, long timeout){return !syncVisible(element,timeout);}
-	public Boolean syncHidden(WebElement element, long timeout, Boolean failOnFalse){return !syncVisible(element, timeout, failOnFalse);}
-	public Boolean syncHidden(WebElement element, Boolean failOnFalse){return !syncVisible(element, failOnFalse);}
-	public Boolean syncHidden(By by){return !syncVisible(by);}
-	public Boolean syncHidden(By by, long timeout){return !syncVisible(by,timeout);}
-	public Boolean syncHidden(By by, long timeout, Boolean failOnFalse){return !syncVisible(by, timeout, failOnFalse);}
-	public Boolean syncHidden(By by, Boolean failOnFalse){return !syncVisible(by, failOnFalse);}
-
-	//*******************************
-	//*			SYNC ENABLED		*
-	//*******************************
-	public Boolean syncEnabled(){
-		Boolean isEnabled = false;
-		if(this.timeout == 0.0) this.timeout = Constants.getImplicitWaitTimeout();
-		System.out.println("Syncing to element ["+getElementLocator()+"] to be enabled within ["+String.valueOf(timeout)+"] seconds.");
-		getElementDriver().manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
-		isEnabled = getElement().isEnabled();
-		this.timeout = (long) 0.0;
-		getElementDriver().manage().timeouts().implicitlyWait(Constants.getImplicitWaitTimeout(), TimeUnit.SECONDS);
-		return isEnabled;
-	}
-	
-	public Boolean syncEnabled(long timeout){
-		Boolean isEnabled = false;
-		this.timeout = timeout;
-		isEnabled = syncEnabled();
-		return isEnabled;
-	}
-	
-	public Boolean syncEnabled(long timeout, Boolean failOnFalse){
-		Boolean isEnabled = false;
-		isEnabled = syncEnabled(timeout);
-		if(failOnFalse && !isEnabled){
-			String message = "The element ["+getElementLocator()+"] was not located within ["+String.valueOf(this.timeout)+"] seconds.";
-			System.out.println(message);
-			throw new RuntimeException(message);
-		}
-		return isEnabled;
-	}
-	
-	public Boolean syncEnabled(Boolean failOnFalse){
-		Boolean isEnabled = false;
-		isEnabled = syncEnabled();
-		if(failOnFalse && !isEnabled){
-			String message = "The element ["+getElementLocator()+"] was not located within ["+String.valueOf(this.timeout)+"] seconds.";
-			System.out.println(message);
-			throw new RuntimeException(message);
-		}
-		return isEnabled;
-	}
-	
-	public Boolean syncEnabled(WebElement element){
-		setElement(element);
-		return syncEnabled();
-	}
-	
-	public Boolean syncEnabled(WebElement element, long timeout){
-		setElement(element);
-		return syncEnabled(timeout);
-	}
-
-	public Boolean syncEnabled(WebElement element, long timeout, Boolean failOnFalse){
-		setElement(element);
-		return syncEnabled(timeout, failOnFalse);
-	}
-
-	public Boolean syncEnabled(WebElement element, Boolean failOnFalse){
-		setElement(element);
-		return syncEnabled(failOnFalse);
-	}	
-	
-	public Boolean syncEnabled(By by){
-		setElement(by);
-		return syncEnabled();
-	}
-	
-	public Boolean syncEnabled(By by, long timeout){
-		setElement(by);
-		return syncEnabled(timeout);
-	}
-
-	public Boolean syncEnabled(By by, long timeout, Boolean failOnFalse){
-		setElement(by);
-		return syncEnabled(timeout, failOnFalse);
-	}
-
-	public Boolean syncEnabled(By by, Boolean failOnFalse){
-		setElement(by);
-		return syncEnabled(failOnFalse);
-	}
-	
-	//*******************************
-	//*			SYNC DISABLED			*
-	//*******************************
-	public Boolean syncDisabled(){return !syncEnabled();}
-	public Boolean syncDisabled(long timeout){return !syncEnabled(timeout);}
-	public Boolean syncDisabled(long timeout, Boolean failOnFalse){return !syncEnabled(timeout, failOnFalse);}
-	public Boolean syncDisabled(Boolean failOnFalse){return !syncEnabled(failOnFalse);}
-	public Boolean syncDisabled(WebElement element){return !syncEnabled(element);}
-	public Boolean syncDisabled(WebElement element, long timeout){return !syncEnabled(element,timeout);}
-	public Boolean syncDisabled(WebElement element, long timeout, Boolean failOnFalse){return !syncEnabled(element, timeout, failOnFalse);}
-	public Boolean syncDisabled(WebElement element, Boolean failOnFalse){return !syncEnabled(element, failOnFalse);}
-	public Boolean syncDisabled(By by){return !syncEnabled(by);}
-	public Boolean syncDisabled(By by, long timeout){return !syncEnabled(by,timeout);}
-	public Boolean syncDisabled(By by, long timeout, Boolean failOnFalse){return !syncEnabled(by, timeout, failOnFalse);}
-	public Boolean syncDisabled(By by, Boolean failOnFalse){return !syncEnabled(by, failOnFalse);}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	public Boolean sync(String visibleHiddenEnabledDisabled){
-		Boolean isTrue = false;
+	/**
+	 * @summary Synchronizes to an element property which is determined by a user-defined parameter. 
+	 * 			The duration of the sync is determined by the WebDriver's ImplicitWait timeout
+	 * @param 	syncType - used to define the type of sync to perform
+	 * @see 	https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#isDisplayed()
+	 * @see 	https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#isEnabled()
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(String syncType){
+		Boolean synced = false;
+		String reportTimeout = "";
 		String[] validSyncs = {"visible", "hidden", "enabled", "disabled"};
-		if(this.timeout == 0.0) this.timeout = Constants.getImplicitWaitTimeout();
-		getElementDriver().manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
-		System.out.println("Syncing to element ["+getElementLocator()+"] to be "+visibleHiddenEnabledDisabled+" within ["+String.valueOf(timeout)+"] seconds.");
-		
-		switch (visibleHiddenEnabledDisabled.toLowerCase()) {
+		if(timeout == 0.0) reportTimeout = String.valueOf(Constants.getImplicitWaitTimeout());
+		System.out.println("Syncing to element ["+getElementLocator()+"] to be "+syncType+" within ["+reportTimeout+"] seconds.");
+		switch (syncType.toLowerCase()) {
 			case "visible":
-				isTrue = getElement().isDisplayed();
+				synced = getElement().isDisplayed();
 				break;
 			case "hidden":
-				isTrue = !(getElement().isDisplayed());
+				synced = !(getElement().isDisplayed());
 				break;
 			case "enabled":
-				isTrue = getElement().isEnabled();
+				synced = getElement().isEnabled();
 				break;
 			case "disabled":
-				isTrue = !(getElement().isEnabled());
+				synced = !(getElement().isEnabled());
 				break;
 			default:
-				message = "The sync type ["+visibleHiddenEnabledDisabled+"] is not valid. Valid values are: ["+validSyncs.toString()+"]";
+				message = "The sync type ["+syncType+"] is not valid. Valid values are: ["+outputValidSyncTypes(validSyncs)+"]";
+				System.out.println(message);
 				break;
 		}
-		
-		this.timeout = (long) 0.0;
-		getElementDriver().manage().timeouts().implicitlyWait(Constants.getImplicitWaitTimeout(), TimeUnit.SECONDS);
-		return isTrue;
+		return synced;
 	}
-//	
-//	public Boolean syncVisible(long timeout){
-//		Boolean isVisible = false;
-//		this.timeout = timeout;
-//		isVisible = syncVisible();
-//		return isVisible;
-//	}
-//	
-//	public Boolean syncVisible(long timeout, Boolean failOnFalse){
-//		Boolean isVisible = false;
-//		isVisible = syncVisible(timeout);
-//		if(failOnFalse && !isVisible){
-//			String message = "The element ["+getElementLocator()+"] was not located within ["+String.valueOf(this.timeout)+"] seconds.";
-//			System.out.println(message);
-//			throw new RuntimeException(message);
-//		}
-//		return isVisible;
-//	}
-//	
-//	public Boolean syncVisible(Boolean failOnFalse){
-//		Boolean isVisible = false;
-//		isVisible = syncVisible();
-//		if(failOnFalse && !isVisible){
-//			String message = "The element ["+getElementLocator()+"] was not located within ["+String.valueOf(this.timeout)+"] seconds.";
-//			System.out.println(message);
-//			throw new RuntimeException(message);
-//		}
-//		return isVisible;
-//	}
-//	
-//	public Boolean syncVisible(WebElement element){
-//		setElement(element);
-//		return syncVisible();
-//	}
-//	
-//	public Boolean syncVisible(WebElement element, long timeout){
-//		setElement(element);
-//		return syncVisible(timeout);
-//	}
-//
-//	public Boolean syncVisible(WebElement element, long timeout, Boolean failOnFalse){
-//		setElement(element);
-//		return syncVisible(timeout, failOnFalse);
-//	}
-//
-//	public Boolean syncVisible(WebElement element, Boolean failOnFalse){
-//		setElement(element);
-//		return syncVisible(failOnFalse);
-//	}	
-//	
-//	public Boolean syncVisible(By by){
-//		setElement(by);
-//		return syncVisible();
-//	}
-//	
-//	public Boolean syncVisible(By by, long timeout){
-//		setElement(by);
-//		return syncVisible(timeout);
-//	}
-//
-//	public Boolean syncVisible(By by, long timeout, Boolean failOnFalse){
-//		setElement(by);
-//		return syncVisible(timeout, failOnFalse);
-//	}
-//
-//	public Boolean syncVisible(By by, Boolean failOnFalse){
-//		setElement(by);
-//		return syncVisible(failOnFalse);
-//	}
-//	
-//	//*******************************
-//	//*			SYNC HIDDEN			*
-//	//*******************************
-//	public Boolean syncHidden(){return !syncVisible();}
-//	public Boolean syncHidden(long timeout){return !syncVisible(timeout);}
-//	public Boolean syncHidden(long timeout, Boolean failOnFalse){return !syncVisible(timeout, failOnFalse);}
-//	public Boolean syncHidden(Boolean failOnFalse){return !syncVisible(failOnFalse);}
-//	public Boolean syncHidden(WebElement element){return !syncVisible(element);}
-//	public Boolean syncHidden(WebElement element, long timeout){return !syncVisible(element,timeout);}
-//	public Boolean syncHidden(WebElement element, long timeout, Boolean failOnFalse){return !syncVisible(element, timeout, failOnFalse);}
-//	public Boolean syncHidden(WebElement element, Boolean failOnFalse){return !syncVisible(element, failOnFalse);}
-//	public Boolean syncHidden(By by){return !syncVisible(by);}
-//	public Boolean syncHidden(By by, long timeout){return !syncVisible(by,timeout);}
-//	public Boolean syncHidden(By by, long timeout, Boolean failOnFalse){return !syncVisible(by, timeout, failOnFalse);}
-//	public Boolean syncHidden(By by, Boolean failOnFalse){return !syncVisible(by, failOnFalse);}
+	
+	/**
+	 * @summary Synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by user-defined parameter.
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	timeout - long, value to set for the ImplicitWait timeout
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(String syncType, long timeout){
+		Boolean synced = false;
+		setSyncTimeout(timeout);
+		synced = sync(syncType);
+		resetSyncTimeout();
+		return synced;
+	}
+	/**
+	 * @summary Synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by user-defined parameter.
+	 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	timeout - long, value to set for the ImplicitWait timeout
+	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(String syncType, long timeout, Boolean failOnFalse){
+		Boolean synced = false;
+		setSyncTimeout(timeout);
+		synced = sync(syncType);
+		resetSyncTimeout();
+		if(failOnFalse && !synced){
+			message = "The element [" +getElementLocator()+ "] was not found to be [" +syncType+ "] after ["+String.valueOf(timeout)+"] seconds.";
+			System.out.println(message);
+			throw new RuntimeException(message);
+		}else{
+			return synced;	
+		}
+	}
+	/**
+	 * @summary Synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by the ImplicitWait value in the Constants.java file.
+	 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(String syncType, Boolean failOnFalse){
+		Boolean synced = false;
+		synced = sync(syncType);
+		if(failOnFalse && !synced){
+			message = "The element [" +getElementLocator()+ "] was not found to be [" +syncType+ "] after ["+String.valueOf(timeout)+"] seconds.";
+			System.out.println(message);
+			throw new RuntimeException(message);
+		}else{
+			return synced;	
+		}
+	}	
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by the ImplicitWait value in the Constants.java file.
+	 * @param 	element - WebElement, current element
+	 * @param 	syncType - String, type of sync to perform
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(WebElement element, String syncType){
+		setElement(element);
+		return sync(syncType);
+	}
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by user-defined parameter.
+	 * @param 	element - WebElement, current element
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	timeout - long, value to set for the ImplicitWait timeout
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(WebElement element, String syncType, long timeout){
+		setElement(element);
+		return sync(syncType, timeout);
+	}
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by user-defined parameter.
+	 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+	 * @param 	element - WebElement, current element
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	timeout - long, value to set for the ImplicitWait timeout
+	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(WebElement element, String syncType, long timeout, Boolean failOnFalse){
+		setElement(element);
+		return sync(syncType, timeout, failOnFalse);
+	}
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by the ImplicitWait value in the Constants.java file.
+	 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+	 * @param 	element - WebElement, current element
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(WebElement element, String syncType, Boolean failOnFalse){
+		setElement(element);
+		return sync(syncType, failOnFalse);
+	}	
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by the ImplicitWait value in the Constants.java file.
+	 * @param 	by - By,  by-value with which to define the current element 
+	 * @param 	syncType - String, type of sync to perform
+	 * @return	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(By by, String syncType){
+		setElement(by);
+		return sync(syncType);
+	}
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by user-defined parameter.
+	 * @param by - By,  by-value with which to define the current element 
+	 * @param syncType - String, type of sync to perform
+	 * @param timeout - long, value to set for the ImplicitWait timeout
+	 * @return Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(By by, String syncType, long timeout){
+		setElement(by);
+		return sync(syncType, timeout);
+	}
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by user-defined parameter.
+	 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+	 * @param 	by - By,  by-value with which to define the current element 
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	timeout - long, value to set for the ImplicitWait timeout
+	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(By by, String syncType, long timeout, Boolean failOnFalse){
+		setElement(by);
+		return sync(syncType, timeout, failOnFalse);
+	}
+	/**
+	 * @summary Sets the current element and synchronizes to an element property which is determined by a user-defined parameter.
+	 * 			The duration of the sync is determined by the ImplicitWait value in the Constants.java file.
+	 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+	 * @param 	by - By,  by-value with which to define the current element 
+	 * @param 	syncType - String, type of sync to perform
+	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+	 * @return 	Boolean, true if the sync is successful, false otherwise
+	 */
+	public Boolean sync(By by, String syncType, Boolean failOnFalse){
+		setElement(by);
+		return sync(syncType, failOnFalse);
+	}
+	
+	
+	
+	
+	//*******************************************************************************************************
+	//*******************************************************************************************************
+	//*******************************************************************************************************
+	//*											SELECTS CLASS												*
+	//*******************************************************************************************************
+	//*******************************************************************************************************
+	//*******************************************************************************************************
+	public class Selects{
+
+		// **************************************************************************************************
+		// * 								BASE PAGE CLASS FIElDS 											*
+		// **************************************************************************************************
+		Select select;
+
+		// **************************************************************************************************
+		// * 							BASE PAGE CLASS BUILD AREA 											*
+		// **************************************************************************************************
+		/**
+		 * @summary constructor to build a Select element that sets the local Element as well as the local Select element
+		 * @param selectElement - WebElement, current Select/Element
+		 */
+		public Selects(WebElement selectElement){
+			setElement(selectElement);
+			setSelectElement(getElement());
+		}
+		
+		// **************************************************************************************************
+		// * 							BASE PAGE CLASS INTERACTIONS 										*
+		// **************************************************************************************************
+		/**
+		 * @summary sets the current Select element
+		 * @param element - WebElement, current element
+		 */
+		private void setSelectElement(WebElement element){
+			this.select = new Select(element);
+		}
+		/**
+		 * @summary gets the curent Select element
+		 * @return Select, current Select element
+		 */
+		private Select getSelectElement(){
+			return this.select;
+		}
+		/**
+		 * @summary gets all options of a Select element  and concatenates them into a String and returns them
+		 * @return String, concatenated string of all options
+		 */
+		public String getAllOptionsAsString(){
+			List<WebElement> options = getSelectElement().getOptions();
+			String strOptions = "";
+			syncSelected();
+			for(WebElement option : options){
+				strOptions += option.getText() + ";";
+			}
+			return strOptions;
+		}
+		/**
+		 * @summary gets all selected options of a Select element and concatenates them into a String and returns them
+		 * @return String, concatenated string of all selected options
+		 */
+		public String getAllSelectedOptionsAsString(){
+			List<WebElement> options = getSelectElement().getAllSelectedOptions();
+			String strOptions = "";
+			syncSelected();
+			for(WebElement option : options){
+				strOptions += option.getText() + ";";
+			}
+			return strOptions;
+		}
+		/**
+		 * @summary gets the selected option as a string
+		 * @return String, selected option as a string
+		 */
+		public String getSelectedOptionAsString(){
+			syncSelected();
+			return getSelectElement().getFirstSelectedOption().getText();
+		}
+		/**
+		 * @summary syncs to a Select element and selects an option by index
+		 * @param index - int, index number to choose
+		 */
+		public void selectByIndex(int index){
+			syncSelected();
+			System.out.println("Selecting index ["+String.valueOf(index)+"] from element ["+getElementLocator()+"].");
+			getSelectElement().selectByIndex(index);
+		}
+		/**
+		 * @summary syncs to a Select element and selects an option by value
+		 * @param value - String, value to choose
+		 */
+		public void selectByValue(String value){
+			syncSelected();
+			System.out.println("Selecting option with value ["+value+"] from element ["+getElementLocator()+"].");
+			getSelectElement().selectByValue(value);
+		}
+		/**
+		 * @summary
+		 * @param visibleText
+		 */
+		public void selectByVisibleText(String visibleText){
+			syncSelected();
+			System.out.println("Selecting option with visible text ["+visibleText+"] from element ["+getElementLocator()+"].");
+			getSelectElement().selectByVisibleText(visibleText);
+		}
+		/**
+		 * @summary
+		 */
+		public void deselectAllOptions(){
+			syncSelected();
+			System.out.println("Deselect all options/values from element ["+getElementLocator()+"].");
+			getSelectElement().deselectAll();
+		}
+		/**
+		 * @summary
+		 * @param index
+		 */
+		public void deselectByIndex(int index){
+			syncSelected();
+			System.out.println("Deselect option with index ["+String.valueOf(index)+"] from element ["+getElementLocator()+"].");
+			getSelectElement().deselectByIndex(index);
+		}
+		/**
+		 * @summary
+		 * @param value
+		 */
+		public void deselectByValue(String value){
+			syncSelected();
+			System.out.println("Deselect option with value ["+value+"] from element ["+getElementLocator()+"].");
+			getSelectElement().deselectByValue(value);
+		}
+		/**
+		 * @summary
+		 * @param visibleText
+		 */
+		public void deselectByVisibleText(String visibleText){
+			syncSelected();
+			System.out.println("Deselect option with visible text ["+visibleText+"] from element ["+getElementLocator()+"].");
+			getSelectElement().deselectByVisibleText(visibleText);
+		}
+		
+		//***********************************
+		//***********************************
+		//*			SELECT SYNCS			*
+		//***********************************
+		//***********************************
+		/**
+		 * @summary Synchronizes to an element to be selected. 
+		 *			The duration of the sync is determined by the WebDriver's ImplicitWait timeout
+		 * @see 	https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#isSelected()
+		 * @return 	Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(){
+			Boolean synced = false;
+			synced = getElement().isSelected();
+			return synced;
+		}
+		/**
+		 * @summary Synchronizes to an element to be selected. 
+		 *			The duration of the sync is determined by the WebDriver's ImplicitWait timeout
+		 * @param 	timeout - long, value to set for the ImplicitWait timeout
+		 * @return 	Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(long timeout){
+			Boolean synced = false;
+			setSyncTimeout(timeout);
+			synced = syncSelected();
+			resetSyncTimeout();
+			return synced;
+		}
+		/**
+		 * @summary Synchronizes to an element to be selected.
+		 * 			The duration of the sync is determined by user-defined parameter.
+		 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+		 * @param 	timeout - long, value to set for the ImplicitWait timeout
+		 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+		 * @return 	Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(long timeout, Boolean failOnFalse){
+			Boolean synced = false;
+			synced = syncSelected(timeout);
+			if(failOnFalse && !synced){
+				message = "The element ["+getElementLocator()+"] was not found to have been selected after ["+String.valueOf(timeout)+"] seconds.";
+				System.out.println(message);
+				throw new RuntimeException(message);
+			}else{
+				return synced;
+			}
+		}
+		/**
+		 * @summary Synchronizes to an element to be selected.
+		 * 			The duration of the sync is determined by the WebDriver's ImplicitWait timeout
+		 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+		 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(Boolean failOnFalse){
+			Boolean synced = false;
+			synced = syncSelected();
+			if(failOnFalse && !synced){
+				message = "The element ["+getElementLocator()+"] was not found to have been selected after ["+String.valueOf(Constants.getImplicitWaitTimeout())+"] seconds.";
+				System.out.println(message);
+				throw new RuntimeException(message);
+			}else{
+				return synced;
+			}
+		}
+		/**
+		 * @summary Sets the current element then synchronizes to an element to be selected. 
+		 *			The duration of the sync is determined by the WebDriver's ImplicitWait timeout
+		 * @param 	element - WebElement, current element
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(WebElement element){
+			setElement(element);
+			return syncSelected();
+		}
+		/**
+		 * @summary Sets the current element then synchronizes to an element to be selected. 
+		 *			The duration of the sync is determined by user-defined parameter.
+		 * @param 	element - WebElement, current element
+		 * @param 	timeout - long, value to set for the ImplicitWait timeout
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(WebElement element, long timeout){
+			setElement(element);
+			return syncSelected(timeout);
+		}
+		/**
+		 * @summary Sets the current element then synchronizes to an element to be selected.
+		 * 			The duration of the sync is determined by user-defined parameter.
+		 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+		 * @param 	element - WebElement, current element
+		 * @param 	timeout - long, value to set for the ImplicitWait timeout
+		 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(WebElement element, long timeout, Boolean failOnFalse){
+			setElement(element);
+			return syncSelected(timeout, failOnFalse);
+		}
+		/**
+		 * @summary Sets the current element then Synchronizes to an element to be selected.
+		 * 			The duration of the sync is determined by user-defined parameter.
+		 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+		 * @param 	element - WebElement, current element
+		 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(WebElement element, Boolean failOnFalse){
+			setElement(element);
+			return syncSelected(failOnFalse);
+		}
+		/**
+		 * @summary Sets the current element then synchronizes to an element to be selected. 
+		 *			The duration of the sync is determined by the WebDriver's ImplicitWait timeout
+		 * @param 	by - By, by-value with which to define the current element 
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(By by){
+			setElement(by);
+			return syncSelected();
+		}
+		/**
+		 * @summary Sets the current element then synchronizes to an element to be selected. 
+		 *			The duration of the sync is determined by user-defined parameter.
+		 * @param 	by - By, by-value with which to define the current element
+		 * @param 	timeout - long, value to set for the ImplicitWait timeout
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(By by, long timeout){
+			setElement(by);
+			return syncSelected(timeout);
+		}
+		/**
+		 * @summary Sets the current element then synchronizes to an element to be selected.
+		 * 			The duration of the sync is determined by user-defined parameter.
+		 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+		 * @param 	by - By, by-value with which to define the current element
+		 * @param 	timeout - long, value to set for the ImplicitWait timeout
+		 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(By by, long timeout, Boolean failOnFalse){
+			setElement(by);
+			return syncSelected(timeout, failOnFalse);
+		}
+		/**
+		 * @summary Sets the current element then Synchronizes to an element to be selected.
+		 * 			The duration of the sync is determined by user-defined parameter.
+		 * 			If the sync fails, the test can fail if the user-defined parameter indicates it
+		 * @param 	by - By, by-value with which to define the current element
+		 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
+		 * @return  Boolean, true if the sync is successful, false otherwise
+		 */
+		public Boolean syncSelected(By by, Boolean failOnFalse){
+			setElement(by);
+			return syncSelected(failOnFalse);
+		}
+	}
 }

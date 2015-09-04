@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
+import org.openqa.selenium.support.ui.Select;
 
 import selenium.core.Constants;
 import selenium.core.test.BaseTestClass;
@@ -36,7 +37,6 @@ public class LoginPage extends selenium.core.page.BasePageClass{
 	 * @param btc - BaseTestClass, passed from the test level when a page class is instantiated
 	 */
 	public LoginPage(BaseTestClass btc){
-		System.out.println("Entering LoginPage");
 		setElementBaseTestClass(btc);
 		PageFactory.initElements(getElementDriver(), this);
 	}
