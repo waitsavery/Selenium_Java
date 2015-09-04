@@ -103,4 +103,8 @@ public class Element {
 	private String getElementLocatorUsing(){
 		return getElement().toString().split("->")[1].split(":")[1].trim();
 	}
+	
+	public boolean elementWired() {
+		return (getElement() != null);
+	}
 }

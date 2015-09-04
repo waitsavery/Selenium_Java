@@ -120,6 +120,68 @@ public class BasePageClass extends Element{
 	public void click(WebDriver driver, By by){
 		setElementAndDriver(driver, by);
 		click();
+	}	
+	/**
+	 * @summary intended to be intuitive for checkboxes, it uses the ckick() method to toggle a checkbox from it's current state 
+	 */
+	public void check(){
+		click();
+	}
+	/**
+	 * @summary intended to be intuitive for checkboxes, it uses the ckick() method to toggle a checkbox from it's current state
+	 * @param 	element - WebElement, current element
+	 */
+	public void check(WebElement element){
+		click(element);
+	}
+	/**
+	 * @summary intended to be intuitive for checkboxes, it uses the ckick() method to toggle a checkbox from it's current state
+	 * @param 	by - By, value with which to locate an element
+	 */
+	public void check(By by){
+		click(by);
+	}
+	/**
+	 * @summary intended to be intuitive for checkboxes, it uses the ckick() method to toggle a checkbox from it's current state
+	 * @param 	driver - WebDriver, current driver
+	 * @param 	by - By, value with which to locate an element
+	 */
+	public void check(WebDriver driver, By by){
+		click(driver, by);
+	}	
+	/**
+	 * @summary uses JavaScript to scroll an element into view and then click it
+	 */
+	public void jsClick() {
+		JavascriptExecutor executor = (JavascriptExecutor) getElementDriver();
+		executor.executeScript(
+				"arguments[0].scrollIntoView(true);arguments[0].click();",
+				getElement());
+	}
+	/**
+	 * @summary sets the current element then uses JavaScript to scroll an element into view and then click it
+	 * @param 	element - WebElement, current element
+	 */
+	public void jsClick(WebElement element) {
+		setElement(element);
+		jsClick();
+	}
+	/**
+	 * @summary sets the current element then uses JavaScript to scroll an element into view and then click it
+	 * @param 	by - By, value with which to locate an element
+	 */
+	public void jsClick(By by) {
+		setElement(by);
+		jsClick();
+	}
+	/**
+	 * @summary sets the current driver and element then uses JavaScript to scroll an element into view and then click it
+	 * @param 	driver - WebDriver, current driver
+	 * @param 	by - By, value with which to locate an element
+	 */
+	public void jsClick(WebDriver driver, By by) {
+		setElementAndDriver(driver, by);
+		jsClick();
 	}
 	//*******************************
 	//*******************************
@@ -130,6 +192,7 @@ public class BasePageClass extends Element{
 	 * @summary - uses JavaScript to highlight an element
 	 */
 	public void highlight() {
+		sync("visible");
 		((JavascriptExecutor) getElementDriver()).executeScript(
 				"arguments[0].style.border='3px solid red'", getElement());
 	}
@@ -230,7 +293,8 @@ public class BasePageClass extends Element{
 	}
 	/**
 	 * @summary Synchronizes to an element property which is determined by a user-defined parameter. 
-	 * 			The duration of the sync is determined by the WebDriver's ImplicitWait timeout
+	 * 			The duration of the sync is determined by the WebDriver's ImplicitWait timeout.
+	 * 			Valid sync types: visible, hidden, enabled, disabled
 	 * @param 	syncType - used to define the type of sync to perform
 	 * @see 	https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#isDisplayed()
 	 * @see 	https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#isEnabled()
@@ -417,7 +481,126 @@ public class BasePageClass extends Element{
 	public Boolean sync(By by, String syncType, Boolean failOnFalse){
 		setElement(by);
 		return sync(syncType, failOnFalse);
+	}	
+	
+	/**
+	 * @summary This uses the HTML DOM readyState property to wait until a page is
+	 * 			finished loading. It will wait for the ready state to be either
+	 * 			'interactive' or 'complete'.
+	 * @version 12/16/2014
+	 * @author 	Jessica Marshall
+	 * @return 	True if the DOM is interactive or complete, false otherwise
+	 * @throws InterruptedException 
+	 */
+	public boolean isDomInteractive() throws InterruptedException {
+		Boolean isInteractive = true;
+		int count = 0;
+		Object obj = null;
+		if(this.timeout == 0.0)setSyncTimeout(Constants.getPageLoadTimeout());
+		do {
+			// this returns a boolean
+			obj = ((JavascriptExecutor) getElementDriver()).executeScript(
+					"var result = document.readyState; return (result == 'complete' || result == 'interactive');");
+			if (count == this.timeout){
+				resetSyncTimeout();
+				return false;
+			}
+			Thread.sleep(500);
+			count++;
+		} while (obj.equals(false));
+		resetSyncTimeout();
+		return isInteractive;
 	}
+
+	/**
+	 * @summary Overloaded method - gives option of specifying a timeout. This uses the
+	 * 			HTML DOM readyState property to wait until a page is finished loading. It
+	 * 			will wait for the ready state to be either 'interactive' or 'complete'.
+	 * @param 	timeout - int number seconds to wait for a page to finish
+	 *            		loading before quitting
+	 * @version 12/16/2014
+	 * @author 	Jessica Marshall
+	 * @return 	True if the DOM is interactive or complete, false otherwise
+	 * @throws InterruptedException 
+	 */
+	public boolean isDomInteractive(int timeout) throws InterruptedException {
+		Boolean interactive = false;
+		setSyncTimeout(timeout);
+		interactive = isDomInteractive();
+		return interactive;
+	}
+
+	/**
+	 * @summary A more strict version of isDomInteractive. This uses the HTML DOM
+	 * 			readyState property to wait until a page is finished loading. It will
+	 * 			wait for the ready state to be 'complete'.
+	 * @version 12/16/2014
+	 * @author 	Jessica Marshall
+	 * @return 	True if the DOM is interactive or complete, false otherwise
+	 * @throws InterruptedException 
+	 */
+	public boolean isDomComplete() throws InterruptedException {
+		Boolean isComplete = true;
+		int count = 0;
+		Object obj = null;
+		if(this.timeout == 0.0)setSyncTimeout(Constants.getPageLoadTimeout());
+		do {
+			// this returns a boolean
+			obj = ((JavascriptExecutor) getElementDriver())
+					.executeScript("var result = document.readyState; return (result == 'complete');");
+			if (count == this.timeout){
+				resetSyncTimeout();
+				return false;
+			}
+			Thread.sleep(500);
+			count++;
+		} while (obj.equals(false));
+		resetSyncTimeout();
+		return isComplete;
+	}
+
+	/**
+	 * @summary Overloaded method - gives option of specifying a timeout. A more strict
+	 * 			version of isDomInteractive This uses the HTML DOM readyState property to
+	 * 			wait until a page is finished loading. It will wait for the ready state
+	 * 			to be 'complete'.
+	 * @param 	timeout - int, number seconds to wait for a page to finish loaded before quiting
+	 * @version 12/16/2014
+	 * @author 	Jessica Marshall
+	 * @return 	True if the DOM is interactive or complete, false otherwise
+	 * @throws InterruptedException 
+	 */
+	public boolean isDomComplete(int timeout) throws InterruptedException {
+		setSyncTimeout(timeout);
+		return isDomComplete();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

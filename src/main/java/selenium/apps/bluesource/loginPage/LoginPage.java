@@ -3,13 +3,12 @@ package selenium.apps.bluesource.loginPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
-import org.openqa.selenium.support.ui.Select;
 
 import selenium.core.Constants;
+import selenium.core.page.BasePageClass;
 import selenium.core.test.BaseTestClass;
 
-public class LoginPage extends selenium.core.page.BasePageClass{
+public class LoginPage extends BasePageClass{
 	// ***************************
 	// * LOGIN PAGE CLASS FIElDS *
 	// ***************************
