@@ -518,8 +518,8 @@ public class BasePageClass extends Element{
 			getSelectElement().selectByValue(value);
 		}
 		/**
-		 * @summary
-		 * @param visibleText
+		 * @summary syncs to a Select element and selects an option by visible text
+		 * @param visibleText - String, text for which to search
 		 */
 		public void selectByVisibleText(String visibleText){
 			syncSelected();
@@ -527,7 +527,7 @@ public class BasePageClass extends Element{
 			getSelectElement().selectByVisibleText(visibleText);
 		}
 		/**
-		 * @summary
+		 * @summary syncs to a Select element and deselects all options
 		 */
 		public void deselectAllOptions(){
 			syncSelected();
@@ -535,8 +535,8 @@ public class BasePageClass extends Element{
 			getSelectElement().deselectAll();
 		}
 		/**
-		 * @summary
-		 * @param index
+		 * @summary syncs to a Select element and deselects an option by index
+		 * @param index - int, index of option to deselect
 		 */
 		public void deselectByIndex(int index){
 			syncSelected();
@@ -544,8 +544,8 @@ public class BasePageClass extends Element{
 			getSelectElement().deselectByIndex(index);
 		}
 		/**
-		 * @summary
-		 * @param value
+		 * @summary syncs to a Select element and deselects an option by value
+		 * @param value - String, value of the option to deselect
 		 */
 		public void deselectByValue(String value){
 			syncSelected();
@@ -553,8 +553,8 @@ public class BasePageClass extends Element{
 			getSelectElement().deselectByValue(value);
 		}
 		/**
-		 * @summary
-		 * @param visibleText
+		 * @summary syncs to a Select element and deselects an option by visible text
+		 * @param visibleText - text by which to deselect an option
 		 */
 		public void deselectByVisibleText(String visibleText){
 			syncSelected();
