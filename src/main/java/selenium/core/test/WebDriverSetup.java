@@ -45,6 +45,7 @@ public class WebDriverSetup {
 	private void setDriver(WebDriver driver) {
 		this.driver = driver;
 	}
+
 	/**
 	 * @summary gets the base webdriver for the test
 	 * @return base WebDriver
@@ -62,6 +63,7 @@ public class WebDriverSetup {
 	public void setBrowserType(String browserType) {
 		this.browserType = browserType;
 	}
+
 	/**
 	 * @summary gets the browser under test
 	 * @return String, browser type under test
@@ -79,6 +81,7 @@ public class WebDriverSetup {
 	public void setBrowserVersion(String browserVersion) {
 		this.browserVersion = browserVersion;
 	}
+
 	/**
 	 * @summary gets the browser version under test
 	 * @return String, browser version under test
@@ -96,6 +99,7 @@ public class WebDriverSetup {
 	public void setOperatingSystem(String operatingSystem) {
 		this.operatingSystem = operatingSystem;
 	}
+
 	/**
 	 * @summary gets the operating system under test
 	 * @return - String, operating system under test
@@ -113,6 +117,7 @@ public class WebDriverSetup {
 	public void setEnvironment(String environment) {
 		this.environment = environment;
 	}
+
 	/**
 	 * @summary gets the environment un which to test
 	 * @return String, environment in which to test
@@ -130,6 +135,7 @@ public class WebDriverSetup {
 	public void setRunLocation(String runLocation) {
 		this.runLocation = runLocation;
 	}
+
 	/**
 	 * @summary gets the test execution run location
 	 * @return String, test execution run location
@@ -145,20 +151,23 @@ public class WebDriverSetup {
 	 * @summary closes all windows for a given WebDriver and, if testing with
 	 *          chorme on windows, will ensure that no chrome or chromedriver
 	 *          processes remain before the test ends
-	 * @param driver - WebDriver, driver for which to close browsers as well as the driver itself
+	 * @param driver
+	 *            - WebDriver, driver for which to close browsers as well as the
+	 *            driver itself
 	 */
 	public void closeAllBrowsersAndQuitDriver(WebDriver driver) {
-		//Grab all window handles for the driver
+		// Grab all window handles for the driver
 		Set<String> windowHandles = driver.getWindowHandles();
-		//Iterate through each handle and close them
+		// Iterate through each handle and close them
 		for (String handle : windowHandles) {
 			driver.switchTo().window(handle);
 			driver.close();
 		}
-		//Quit the driver
+		// Quit the driver
 		driver.quit();
 
-		//If testing on windows with chrome, ensure no chrome or chromedriver processes remian before ending the test
+		// If testing on windows with chrome, ensure no chrome or chromedriver
+		// processes remian before ending the test
 		if (getBrowserType().equalsIgnoreCase("chrome")) {
 			if (getOperatingSystem().equalsIgnoreCase("windows")) {
 				try {

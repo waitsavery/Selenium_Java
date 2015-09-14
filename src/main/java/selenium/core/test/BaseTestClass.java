@@ -124,12 +124,15 @@ public class BaseTestClass extends WebDriverSetup {
 
 	// Define getter/setter for the application
 	/**
-	 * @summary sets the application under test; used to determine URL, credentials, etc
-	 * @param application - String, application under test
+	 * @summary sets the application under test; used to determine URL,
+	 *          credentials, etc
+	 * @param application
+	 *            - String, application under test
 	 */
 	public void setApplication(String application) {
 		this.application = application;
 	}
+
 	/**
 	 * @summary gets the application under test
 	 * @return String, application under test
@@ -141,11 +144,13 @@ public class BaseTestClass extends WebDriverSetup {
 	// Define getter/setter for the user role
 	/**
 	 * @summary sets the user role; used to determine credentials
-	 * @param role - String, role to use for testing
+	 * @param role
+	 *            - String, role to use for testing
 	 */
 	public void setUserRole(String role) {
 		this.userRole = role;
 	}
+
 	/**
 	 * @summary gets the user role
 	 * @return String, user role
@@ -153,8 +158,8 @@ public class BaseTestClass extends WebDriverSetup {
 	public String getUserRole() {
 		return this.userRole;
 	}
-	
-	public BaseTestClass getBaseTestClass(){
+
+	public BaseTestClass getBaseTestClass() {
 		return this;
 	}
 

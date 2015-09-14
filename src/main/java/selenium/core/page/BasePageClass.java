@@ -19,6 +19,7 @@ public class BasePageClass extends Element{
 	// **************************************************************************************************
 	long timeout = (long) 0.0;
 	String message;
+	enum syncTypes {visible, hidden, enabled, disabled}
 
 	// **************************************************************************************************
 	// * 							BASE PAGE CLASS BUILD AREA 											*
@@ -50,7 +51,7 @@ public class BasePageClass extends Element{
 	 * @param 	value - String, keys to set the value of the element
 	 */
 	public void set(String value){
-		sync("visible");
+		sync(syncTypes.visible);
 		System.out.println("Sending keys ["+value+"] to element ["+getElementLocator()+"].");
 		getElement().clear();
 		getElement().sendKeys(value);
@@ -92,7 +93,7 @@ public class BasePageClass extends Element{
 	 * @summary syncs to the element to be visible, then clicks the element
 	 */
 	public void click(){
-		sync("visible");
+		sync(syncTypes.visible);
 		System.out.println("Clicking on element ["+getElementLocator()+"].");
 		getElement().click();
 	}
@@ -192,7 +193,7 @@ public class BasePageClass extends Element{
 	 * @summary - uses JavaScript to highlight an element
 	 */
 	public void highlight() {
-		sync("visible");
+		sync(syncTypes.visible);
 		((JavascriptExecutor) getElementDriver()).executeScript(
 				"arguments[0].style.border='3px solid red'", getElement());
 	}
@@ -284,12 +285,12 @@ public class BasePageClass extends Element{
 	 * @param 	syncTypeArray - string array of valid sync types
 	 * @return 	string, valid sync types
 	 */
-	private String outputValidSyncTypes(String[] syncTypeArray){
-		String syncTypes = "";
-		for(String type : syncTypeArray){
-			syncTypes += type + " ; ";
+	private String outputValidSyncTypes(){
+		String types = "";
+		for(syncTypes type: syncTypes.values()){
+			types += type.toString() + " ; ";
 		}
-		return syncTypes;
+		return types;
 	}
 	/**
 	 * @summary Synchronizes to an element property which is determined by a user-defined parameter. 
@@ -300,29 +301,28 @@ public class BasePageClass extends Element{
 	 * @see 	https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#isEnabled()
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(String syncType){
+	public Boolean sync(syncTypes type){
 		Boolean synced = false;
 		String reportTimeout = "";
-		String[] validSyncs = {"visible", "hidden", "enabled", "disabled"};
 		if(timeout == 0.0) reportTimeout = String.valueOf(Constants.getImplicitWaitTimeout());
-		System.out.println("Syncing to element ["+getElementLocator()+"] to be "+syncType+" within ["+reportTimeout+"] seconds.");
-		switch (syncType.toLowerCase()) {
-			case "visible":
-				synced = getElement().isDisplayed();
-				break;
-			case "hidden":
-				synced = !(getElement().isDisplayed());
-				break;
-			case "enabled":
-				synced = getElement().isEnabled();
-				break;
-			case "disabled":
-				synced = !(getElement().isEnabled());
-				break;
-			default:
-				message = "The sync type ["+syncType+"] is not valid. Valid values are: ["+outputValidSyncTypes(validSyncs)+"]";
-				System.out.println(message);
-				break;
+		System.out.println("Syncing to element ["+getElementLocator()+"] to be "+type.toString()+" within ["+reportTimeout+"] seconds.");
+		switch (type) {
+		case visible:
+			synced = getElement().isDisplayed();
+			break;
+		case hidden:
+			synced = !(getElement().isDisplayed());
+			break;
+		case enabled:
+			synced = getElement().isEnabled();
+			break;
+		case disabled:
+			synced = !(getElement().isEnabled());
+			break;
+		default:
+			message = "The sync type ["+type.toString()+"] is not valid. Valid values are: ["+outputValidSyncTypes()+"]";
+			System.out.println(message);
+			break;
 		}
 		return synced;
 	}
@@ -334,7 +334,7 @@ public class BasePageClass extends Element{
 	 * @param 	timeout - long, value to set for the ImplicitWait timeout
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(String syncType, long timeout){
+	public Boolean sync(syncTypes syncType, long timeout){
 		Boolean synced = false;
 		setSyncTimeout(timeout);
 		synced = sync(syncType);
@@ -350,7 +350,7 @@ public class BasePageClass extends Element{
 	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(String syncType, long timeout, Boolean failOnFalse){
+	public Boolean sync(syncTypes syncType, long timeout, Boolean failOnFalse){
 		Boolean synced = false;
 		setSyncTimeout(timeout);
 		synced = sync(syncType);
@@ -371,7 +371,7 @@ public class BasePageClass extends Element{
 	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(String syncType, Boolean failOnFalse){
+	public Boolean sync(syncTypes syncType, Boolean failOnFalse){
 		Boolean synced = false;
 		synced = sync(syncType);
 		if(failOnFalse && !synced){
@@ -389,7 +389,7 @@ public class BasePageClass extends Element{
 	 * @param 	syncType - String, type of sync to perform
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(WebElement element, String syncType){
+	public Boolean sync(WebElement element, syncTypes syncType){
 		setElement(element);
 		return sync(syncType);
 	}
@@ -401,7 +401,7 @@ public class BasePageClass extends Element{
 	 * @param 	timeout - long, value to set for the ImplicitWait timeout
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(WebElement element, String syncType, long timeout){
+	public Boolean sync(WebElement element, syncTypes syncType, long timeout){
 		setElement(element);
 		return sync(syncType, timeout);
 	}
@@ -415,7 +415,7 @@ public class BasePageClass extends Element{
 	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(WebElement element, String syncType, long timeout, Boolean failOnFalse){
+	public Boolean sync(WebElement element, syncTypes syncType, long timeout, Boolean failOnFalse){
 		setElement(element);
 		return sync(syncType, timeout, failOnFalse);
 	}
@@ -428,7 +428,7 @@ public class BasePageClass extends Element{
 	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(WebElement element, String syncType, Boolean failOnFalse){
+	public Boolean sync(WebElement element, syncTypes syncType, Boolean failOnFalse){
 		setElement(element);
 		return sync(syncType, failOnFalse);
 	}	
@@ -439,7 +439,7 @@ public class BasePageClass extends Element{
 	 * @param 	syncType - String, type of sync to perform
 	 * @return	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(By by, String syncType){
+	public Boolean sync(By by, syncTypes syncType){
 		setElement(by);
 		return sync(syncType);
 	}
@@ -451,7 +451,7 @@ public class BasePageClass extends Element{
 	 * @param timeout - long, value to set for the ImplicitWait timeout
 	 * @return Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(By by, String syncType, long timeout){
+	public Boolean sync(By by, syncTypes syncType, long timeout){
 		setElement(by);
 		return sync(syncType, timeout);
 	}
@@ -465,7 +465,7 @@ public class BasePageClass extends Element{
 	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(By by, String syncType, long timeout, Boolean failOnFalse){
+	public Boolean sync(By by, syncTypes syncType, long timeout, Boolean failOnFalse){
 		setElement(by);
 		return sync(syncType, timeout, failOnFalse);
 	}
@@ -478,10 +478,10 @@ public class BasePageClass extends Element{
 	 * @param 	failOnFalse - Boolean, true if the test should fail on sync failure, false otherwise
 	 * @return 	Boolean, true if the sync is successful, false otherwise
 	 */
-	public Boolean sync(By by, String syncType, Boolean failOnFalse){
+	public Boolean sync(By by, syncTypes syncType, Boolean failOnFalse){
 		setElement(by);
 		return sync(syncType, failOnFalse);
-	}	
+	}
 	
 	/**
 	 * @summary This uses the HTML DOM readyState property to wait until a page is
@@ -574,36 +574,6 @@ public class BasePageClass extends Element{
 		setSyncTimeout(timeout);
 		return isDomComplete();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	//*******************************************************************************************************
 	//*******************************************************************************************************

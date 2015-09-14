@@ -8,34 +8,40 @@ import selenium.core.Constants;
 import selenium.core.page.BasePageClass;
 import selenium.core.test.BaseTestClass;
 
-public class LoginPage extends BasePageClass{
+public class LoginPage extends BasePageClass {
 	// ***************************
 	// * LOGIN PAGE CLASS FIElDS *
 	// ***************************
 	private String username;
 	private String password;
-	
+
 	// *******************************
 	// * LOGIN PAGE CLASS BUILD AREA *
 	// *******************************
 	@FindBy(id = "employee_username")
 	private WebElement txtUsername;
-	
+
 	@FindBy(id = "employee_password")
 	private WebElement txtPassword;
-	
+
 	@FindBy(name = "commit")
 	private WebElement btnLogin;
-	
+
 	/**
 	 * Dummy constructor
 	 */
-	public LoginPage(){}
+	public LoginPage() {
+	}
+
 	/**
-	 * Constructor that builds the element class. Uses a BaseTestClass instance to define the driver to use to find elements
-	 * @param btc - BaseTestClass, passed from the test level when a page class is instantiated
+	 * Constructor that builds the element class. Uses a BaseTestClass instance
+	 * to define the driver to use to find elements
+	 * 
+	 * @param btc
+	 *            - BaseTestClass, passed from the test level when a page class
+	 *            is instantiated
 	 */
-	public LoginPage(BaseTestClass btc){
+	public LoginPage(BaseTestClass btc) {
 		setElementBaseTestClass(btc);
 		PageFactory.initElements(getElementDriver(), this);
 	}
@@ -47,22 +53,23 @@ public class LoginPage extends BasePageClass{
 	// *********************************
 	// * LOGIN PAGE CLASS INTERACTIONS *
 	// *********************************
-	public void login(){
+	public void login() {
 		username = Constants.getCredentials(btc.getApplication(), btc.getUserRole())[0];
 		password = Constants.getCredentials(btc.getApplication(), btc.getUserRole())[1];
 		setUsername(username);
 		setPassword(password);
 		clickLogin();
 	}
-	private void clickLogin(){
+
+	private void clickLogin() {
 		click(btnLogin);
 	}
-	
-	private void setUsername(String username){
+
+	private void setUsername(String username) {
 		set(txtUsername, username);
 	}
-	
-	private void setPassword(String password){
+
+	private void setPassword(String password) {
 		set(txtPassword, password);
 	}
 }
