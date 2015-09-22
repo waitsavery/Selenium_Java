@@ -62,6 +62,6 @@ public class simple {
 		driver.findElement(byPassword).sendKeys("test");
 		driver.findElement(byLogin).click();
 		
-		Assert.
+//		Assert.
 	}
 }
