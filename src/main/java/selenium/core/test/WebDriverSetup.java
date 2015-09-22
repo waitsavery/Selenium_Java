@@ -1,4 +1,4 @@
-package core.test;
+package selenium.core.test;
 
 import java.io.IOException;
 import java.util.Set;
@@ -125,20 +125,30 @@ public class WebDriverSetup {
 	}
 	
 	private void generateDriver(){
+		String os = System.getProperty("os.name");
+	    String dir = System.getProperty("user.dir");
+	    String pathDelimiter = "\\";
+	    String chromeDriver = "chromedriver.exe";
+	    if(os.toLowerCase().contains("mac")){
+			pathDelimiter = "/";
+			chromeDriver = "chromedriver";
+	    }
 		switch (getBrowserType().toLowerCase()) {
 		case "firefox":
 			setDriver(new FirefoxDriver());
 			break;
 		case "iexplore":
-			System.setProperty("webdriver.ie.driver", "C:\\Users\\temp\\workspace\\Selenium_Java\\src\\main\\java\\drivers\\IEDriverServer.exe");
+			System.setProperty("webdriver.ie.driver",
+					dir + pathDelimiter + "src"+pathDelimiter+"main"+pathDelimiter+"java"+pathDelimiter+"selenium"+pathDelimiter+"core"+pathDelimiter+"drivers"+pathDelimiter+"IEDriverServer.exe");
 			setDriver(new InternetExplorerDriver());
 			break;
 		case "chrome":
-			System.setProperty("webdriver.chrome.driver", "C:\\Users\\temp\\workspace\\Selenium_Java\\src\\main\\java\\drivers\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver",
+					dir + pathDelimiter + "src"+pathDelimiter+"main"+pathDelimiter+"java"+pathDelimiter+"selenium"+pathDelimiter+"core"+pathDelimiter+"drivers"+pathDelimiter+chromeDriver);
 			setDriver(new ChromeDriver());
 			break;
 		default:
 			break;
-	}
+		}
 	}
 }

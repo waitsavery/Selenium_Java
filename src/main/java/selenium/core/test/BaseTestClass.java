@@ -1,9 +1,11 @@
-package core.test;
+package selenium.core.test;
 
 import java.util.concurrent.TimeUnit;
 
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+
+import selenium.core.Constants;
 
 public class BaseTestClass extends WebDriverSetup{
 	private long implicitWaitTimeout;
